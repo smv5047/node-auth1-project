@@ -4,33 +4,45 @@ const express = require("express")
 const userModel = require("../users/users-model")
 
 module.exports = function restricted() {
-    const authError = {
-        message: "You shall nto pass!"
-    }
+//without express-session
 
-    return async (req, res, next) => {
-        try{
-            const {username, password} = req.headers
+    // const authError = {
+    //     message: "You shall nto pass!"
+    // }
 
-            if (!username || !password) {
-                return res.status(401).json(authError)
-            }
+    // return async (req, res, next) => {
+    //     try{
+    //         const {username, password} = req.headers
 
-            const user = await userModel.findBy({username}).first()
+    //         if (!username || !password) {
+    //             return res.status(401).json(authError)
+    //         }
 
-            if(!user) {
-                return res.status(401).json(authError)
-            }
+    //         const user = await userModel.findBy({username}).first()
 
-            const passwordValid = await bcrypt.compare(password, user.password)
+    //         if(!user) {
+    //             return res.status(401).json(authError)
+    //         }
 
-            if(!passwordValid) {
-                return res.status(401).json(authError)
-            }
+    //         const passwordValid = await bcrypt.compare(password, user.password)
 
-            next()
-        } catch (err) {
-            next(err)
+    //         if(!passwordValid) {
+    //             return res.status(401).json(authError)
+    //         }
+
+    //         next()
+    //     } catch (err) {
+    //         next(err)
+    //     }
+    // }
+
+    return (req,res, next) =>{
+        if(!req.session || !req.session.user) {
+            return res.status(401).json({
+                message: "You shall not pass!"
+            })
         }
+
+        next()
     }
 }

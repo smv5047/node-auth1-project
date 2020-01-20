@@ -8,7 +8,10 @@ module.exports = {
       filename: './data/users.db3'
     },
     migrations: {
-      tableName: 'knex_migrations'
+      directory: "./migrations"
+    },
+    seeds: {
+      directory: "./seeds"
     },
     useNullAsDefault: true,
     pool: {
