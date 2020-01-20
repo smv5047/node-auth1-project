@@ -1,8 +1,30 @@
 const express = require("express")
-const Users = require("./users-model")
+const Users = require("./login-model")
 const router = express.Router()
+const bcrypt = require("bcryptjs")
 
-router.get()
+
+router.post("/", async (req, res, next) => {
+    try {
+        const {username, password} = req.body
+        const user = await Users.findBy({username}).first()
+
+        const passwordValid = await bcrypt.compare(password, user.password)
+
+        if (user && passwordValid) {
+            res.status(200).json({
+                message: `Welcome ${user.username}, you're logged in`
+            })
+        } else {
+            res.status(401).json({
+                message: "You shall not pass!",
+            })
+        }
+
+    } catch (err) {
+        next(err)
+    }
+})
 
 
 
