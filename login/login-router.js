@@ -6,24 +6,19 @@ const bcrypt = require("bcryptjs")
 
 router.post("/", async (req, res, next) => {
     try {
-        const {username, password} = req.body
-        const user = await Users.findBy({username}).first()
-
-        const passwordValid = await bcrypt.compare(password, user.password)
-
-        if (user && passwordValid) {
-            res.status(200).json({
-                message: `Welcome ${user.username}, you're logged in`
-            })
+        const { username, password } = req.body
+        const [user] = await Users.findBy({ username })
+        const validatePassword = await bcrypt.compare(password, user.password)
+    
+        if (user && validatePassword) {
+          req.session.user = user
+          res.status(200).json({ message: `Welcome, ${user.username}. You've logged in successfully.` })
         } else {
-            res.status(401).json({
-                message: "You shall not pass!",
-            })
+          res.status(401).json({ massage: "You shall not pass!" })
         }
-
-    } catch (err) {
+      } catch (err) {
         next(err)
-    }
+      }
 })
 
 

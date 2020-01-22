@@ -1,9 +1,9 @@
-const bcrypt = require("bcryptjs")
-const express = require("express")
+// const bcrypt = require("bcryptjs")
+// const express = require("express")
 
-const userModel = require("../users/users-model")
+// const userModel = require("../users/users-model")
 
-module.exports = function restricted() {
+// module.exports = function restricted() {
 //without express-session
 
     // const authError = {
@@ -36,13 +36,14 @@ module.exports = function restricted() {
     //     }
     // }
 
-    return (req,res, next) =>{
-        if(!req.session || !req.session.user) {
-            return res.status(401).json({
-                message: "You shall not pass!"
-            })
-        }
 
-        next()
+// }
+module.exports = () => (req, res, next)  =>{
+    if(!req.session || !req.session.user) {
+        return res.status(401).json({
+            message: "You shall not pass!"
+        })
     }
+
+    next()
 }

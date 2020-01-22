@@ -25,6 +25,7 @@ const sessionConfig = {
 
 server.use(express.json())
 server.use(session(sessionConfig))
+
 server.use('/api/users', UserRouter)
 server.use('/api/register', RegisterRouter)
 server.use('/api/login', LoginRouter)
